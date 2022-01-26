@@ -1,3 +1,7 @@
+*{
+  /* outline: 1px solid red; */
+}
+
 .App {
   text-align: center;
   box-sizing: border-box;

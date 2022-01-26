@@ -6,5 +6,4 @@ export const Container = styled.div`
   color: white;
   font-family: "Comfortaa", cursive;
   padding: 1em 0;
-  margin-left: 1em;
 `;
