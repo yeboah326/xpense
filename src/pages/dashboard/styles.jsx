@@ -21,6 +21,11 @@ export const UsernamePlus = styled.div`
   width: 100%;
 `;
 
+export const PlusLogout = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
 export const InfoCards = styled.div`
   display: flex;
   flex-direction: row;
@@ -44,5 +49,4 @@ export const ReportContainer = styled.div`
   background-color: black;
   overflow-y: scroll;
   padding: 1rem;
-
 `;

@@ -1,4 +1,3 @@
-import { FaCross, FaSortAmountUpAlt, FaWindowClose } from "react-icons/fa";
 import { BsX } from "react-icons/bs";
 import { Container, AmountDelete } from "./styles";
 export default function ExpenseItem({ amount = 20, description = "Food" }) {
