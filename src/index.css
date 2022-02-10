@@ -12,4 +12,14 @@ code {
     monospace;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Abel&family=Comfortaa:wght@600&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Abel&family=Comfortaa:wght@600&display=swap'); */
+
+@font-face {
+  font-family: 'Abel';
+  src: url('./fonts/Abel-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('./fonts/Comfortaa-VariableFont_wght.ttf');
+}
