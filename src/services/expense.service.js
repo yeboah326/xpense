@@ -8,38 +8,34 @@ const API_URL = process.env.REACT_APP_API_URL;
 export const ExpenseContext = createContext();
 
 // Get date objec to retrieve the current month
-const today = new Date().getMonth();
 
 export default function ExpenseProvider({ children }) {
-  const getUserSummary = async () => {
-    const response = await fetch(API_URL + `/expense/summary`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${AuthService.getToken()}`,
-        "Content-Type": "application/json",
-      },
-    });
-    return response.json();
-  };
+  const today = new Date();
 
-  const getUserSummaryTwo = () =>
-    axios.get(API_URL + `/expense/summary`, {
-      headers: {
-        Authorization: `Bearer ${AuthService.getToken()}`,
-        "Content-Type": "application/json",
-      },
-    }).then((response) => (response => response.data));
-
-  const getMonthlyExpenses = async () => {
+  async function getUserSummary() {
     try {
-      const response = await axios.get(API_URL + `/expense/month/${today}`, {
+      const response = await axios.get(API_URL + `/expense/summary`, {
         headers: { Authorization: `Bearer ${AuthService.getToken()}` },
       });
       return response.data;
     } catch (error) {
       console.error(error);
     }
-  };
+  }
+
+  async function getMonthlyExpenses() {
+    try {
+      const response = await axios.get(
+        API_URL + `/expense/month/${today.getMonth() + 1}`,
+        {
+          headers: { Authorization: `Bearer ${AuthService.getToken()}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   const createExpense = ({ amount, date, description }) =>
     axios
@@ -50,13 +46,29 @@ export default function ExpenseProvider({ children }) {
       )
       .then((response) => console.log(response));
 
+  const months = {
+    1: "january",
+    2: "february",
+    3: "march",
+    4: "april",
+    5: "may",
+    6: "june",
+    7: "july",
+    8: "august",
+    9: "september",
+    10: "october",
+    11: "november",
+    12: "december",
+  };
+
   return (
     <ExpenseContext.Provider
       value={{
         getUserSummary,
-        getUserSummaryTwo,
         getMonthlyExpenses,
         createExpense,
+        months,
+        today,
       }}
     >
       {children}
