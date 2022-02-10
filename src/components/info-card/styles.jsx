@@ -12,7 +12,7 @@ export const Container = styled.div`
   border-radius: 0.3em;
 `;
 export const Amount = styled.div`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
 `;
 
 export const Description = styled.div`
