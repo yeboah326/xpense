@@ -12,8 +12,6 @@ import { AddButton } from "../../components/add-button";
 import { DurationButton } from "../../components/duration-button";
 import Month from "../../components/month/month";
 import { DayExpenseItem } from "../../components/day-expense-item/day-expense-item";
-import Day from "../../components/day/day";
-import ExpenseItem from "../../components/expense-item/expense-item";
 import { useContext, useState, useEffect } from "react";
 import AuthService from "../../services/auth.service";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -23,8 +21,6 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-
-  const API_URL = process.env.REACT_APP_API_URL;
 
   // Set initial state for the user summary
   const [userSummary, setUserSummary] = useState({
@@ -43,7 +39,7 @@ export default function Dashboard() {
   const [authenticated, setAuthenticated] = useState(
     AuthService.isAuthenticated()
   );
-  const { getUserSummary, getMonthlyExpenses, months, today } =
+  const { getUserSummary, getMonthlyExpenses, months, deleteExpense } =
     useContext(ExpenseContext);
 
   const logout = async () => {
@@ -67,7 +63,7 @@ export default function Dashboard() {
 
       console.log(monthlyExpenses);
     }
-  }, [authenticated, API_URL]);
+  }, []);
 
   return authenticated ? (
     <Container>
@@ -103,6 +99,7 @@ export default function Dashboard() {
               day={Object.keys(day)[0]}
               expenseItems={Object.values(day)[0]}
               key={index}
+              deleteExpense={deleteExpense}
             />
           );
         })}

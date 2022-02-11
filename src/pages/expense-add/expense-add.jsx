@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { FaArrowLeft } from "react-icons/fa";
 import AuthService from "../../services/auth.service";
 import { ExpenseContext } from "../../services/expense.service";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function ExpenseAdd() {
   const { register, handleSubmit } = useForm();
@@ -24,10 +25,12 @@ export default function ExpenseAdd() {
   const onSubmit = async ({ amount, date, description }) => {
     console.log(amount, date, description);
     createExpense({ amount, date, description });
+    toast("Expense created successfully", {duration: 3000, position: "bottom-center"})
     navigate("/dashboard");
   };
   return (
     <Container>
+      <Toaster/>
       <Icons>
         <FaArrowLeft onClick={() => navigate("/dashboard")} />
       </Icons>

@@ -45,3 +45,13 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+@font-face {
+  font-family: 'Abel';
+  src: url('./fonts/Abel-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Comfortaa';
+  src: url('./fonts/Comfortaa-VariableFont_wght.ttf');
+}
