@@ -1,7 +1,8 @@
 import axios from "axios";
-import { Axios } from "axios";
 import AuthService from "./auth.service";
-import { createContext, useState } from "react";
+import { createContext } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -12,14 +13,21 @@ export const ExpenseContext = createContext();
 export default function ExpenseProvider({ children }) {
   const today = new Date();
 
+  const navigate = useNavigate();
+
   async function getUserSummary() {
     try {
       const response = await axios.get(API_URL + `/expense/summary`, {
         headers: { Authorization: `Bearer ${AuthService.getToken()}` },
       });
-      return response.data;
+      if (response.status === 200) {
+        return response.data;
+      } else if (response.status === 401) {
+        toast("Token expired", { duration: 2000, position: "bottom-center" });
+      }
     } catch (error) {
-      console.error(error);
+      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      navigate("/login");
     }
   }
 
@@ -31,20 +39,33 @@ export default function ExpenseProvider({ children }) {
           headers: { Authorization: `Bearer ${AuthService.getToken()}` },
         }
       );
-      return response.data;
+      if (response.status === 200) {
+        return response.data;
+      } else if (response.status === 401) {
+        toast("Token expired", { duration: 2000, position: "bottom-center" });
+      }
     } catch (error) {
-      console.error(error);
+      navigate("/login");
     }
   }
 
-  const createExpense = ({ amount, date, description }) =>
-    axios
-      .post(
+  const createExpense = ({ amount, date, description }) => {
+    try {
+      const response = axios.post(
         API_URL + "/expense/",
         { amount, date, description },
         { headers: { Authorization: `Bearer ${AuthService.getToken()}` } }
-      )
-      .then((response) => console.log(response));
+      );
+      if (response.status === 200) {
+        return response;
+      } else if (response.status === 401) {
+        toast("Token expired", { duration: 2000, position: "bottom-center" });
+      }
+    } catch (error) {
+      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      navigate("/login");
+    }
+  };
 
   const months = {
     1: "january",
@@ -61,12 +82,31 @@ export default function ExpenseProvider({ children }) {
     12: "december",
   };
 
+  async function deleteExpense(id) {
+    try {
+      const response = await axios.delete(API_URL + `/expense/${id}`, {
+        headers: { Authorization: `Bearer ${AuthService.getToken()}` },
+      });
+      if (response === 200) {
+        navigate("/expense-add");
+        navigate("/dashboard");
+        return response.data;
+      } else if (response.status === 401) {
+        toast("Token expired", { duration: 2000, position: "bottom-center" });
+      }
+    } catch (error) {
+      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      navigate("/login");
+    }
+  }
+
   return (
     <ExpenseContext.Provider
       value={{
         getUserSummary,
         getMonthlyExpenses,
         createExpense,
+        deleteExpense,
         months,
         today,
       }}
