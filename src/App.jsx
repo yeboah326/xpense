@@ -32,7 +32,15 @@ function App() {
               </ExpenseProvider>
             }
           />
-          <Route exact path="/expense-view" element={<ExpenseView />} />
+          <Route
+            exact
+            path="/expense-view"
+            element={
+              <ExpenseProvider>
+                <ExpenseView />
+              </ExpenseProvider>
+            }
+          />
         </Routes>
       </div>
     </Router>
