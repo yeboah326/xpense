@@ -23,10 +23,10 @@ export default function ExpenseProvider({ children }) {
       if (response.status === 200) {
         return response.data;
       } else if (response.status === 401) {
-        toast("Token expired", { duration: 2000, position: "bottom-center" });
+        toast("Token expired", { duration: 1500, position: "bottom-center" });
       }
     } catch (error) {
-      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      toast("Token expired", { duration: 1500, position: "bottom-center" });
       navigate("/login");
     }
   }
@@ -42,27 +42,31 @@ export default function ExpenseProvider({ children }) {
       if (response.status === 200) {
         return response.data;
       } else if (response.status === 401) {
-        toast("Token expired", { duration: 2000, position: "bottom-center" });
+        toast("Token expired", { duration: 1500, position: "bottom-center" });
       }
     } catch (error) {
       navigate("/login");
     }
   }
 
-  const createExpense = ({ amount, date, description }) => {
+  const createExpense = async ({ amount, date, description }) => {
     try {
-      const response = axios.post(
+      const response = await axios.post(
         API_URL + "/expense/",
         { amount, date, description },
         { headers: { Authorization: `Bearer ${AuthService.getToken()}` } }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
+        toast("Expense created successfully", {
+          duration: 3000,
+          position: "bottom-center",
+        });
+        navigate("/dashboard");
         return response;
-      } else if (response.status === 401) {
-        toast("Token expired", { duration: 2000, position: "bottom-center" });
       }
     } catch (error) {
-      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      console.error(error);
+      toast("Token expired", { duration: 1500, position: "bottom-center" });
       navigate("/login");
     }
   };
@@ -82,21 +86,72 @@ export default function ExpenseProvider({ children }) {
     12: "december",
   };
 
-  async function deleteExpense(id) {
+  async function deleteExpense(id, getPageData) {
     try {
       const response = await axios.delete(API_URL + `/expense/${id}`, {
         headers: { Authorization: `Bearer ${AuthService.getToken()}` },
       });
-      if (response === 200) {
-        navigate("/expense-add");
+      if (response.status === 200) {
+        toast("Expense deleted successfully", {
+          duration: 1200,
+          position: "bottom-center",
+        });
         navigate("/dashboard");
         return response.data;
-      } else if (response.status === 401) {
-        toast("Token expired", { duration: 2000, position: "bottom-center" });
       }
     } catch (error) {
-      toast("Token expired", { duration: 2000, position: "bottom-center" });
+      console.error(error);
+      toast("Token expired", { duration: 1500, position: "bottom-center" });
       navigate("/login");
+    }
+  }
+
+  async function getExpense(id) {
+    try {
+      const response = await axios.get(API_URL + `/expense/${id}`, {
+        headers: { Authorization: `Bearer ${AuthService.getToken()}` },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+      if (response.status === 404) {
+        toast("Expense does not exist", {
+          duration: 1500,
+          position: "bottom-center",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast("Token expired", { duration: 1500, position: "bottom-center" });
+      navigate("/login");
+    }
+  }
+
+  async function editExpense({ amount, date, description, id, getPageData }) {
+    try {
+      const response = await axios.put(
+        API_URL + `/expense/${id}`,
+        { amount, date, description },
+        {
+          headers: { Authorization: `Bearer ${AuthService.getToken()}` },
+        }
+      );
+      if (response.status === 200) {
+        toast("Expense edited successfully", {
+          duration: 1500,
+          position: "bottom-center",
+        });
+        getPageData()
+        return response.data;
+      } else if (response.status === 404) {
+        toast("Expense does not exist", {
+          duration: 1500,
+          position: "bottom-center",
+        });
+      }
+    } catch (error) {
+      toast("Token expired", { duration: 1500, position: "bottom-center" });
+      console.error(error);
     }
   }
 
@@ -107,6 +162,8 @@ export default function ExpenseProvider({ children }) {
         getMonthlyExpenses,
         createExpense,
         deleteExpense,
+        getExpense,
+        editExpense,
         months,
         today,
       }}
