@@ -1,8 +1,13 @@
 import { DayContainer, ExpenseContainer, AmountDelete } from "./styles";
-import { BsX } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
-export function DayExpenseItem({ day, expenseItems, deleteExpense }) {
-
+export function DayExpenseItem({
+  day,
+  expenseItems,
+  getPageData,
+}) {
+  const navigate = useNavigate();
+  
   return (
     <>
       <DayContainer>
@@ -10,10 +15,12 @@ export function DayExpenseItem({ day, expenseItems, deleteExpense }) {
         <hr style={{ width: "100%" }} />
       </DayContainer>
       {expenseItems.map((expense) => (
-        <ExpenseContainer>
+        <ExpenseContainer
+          key={expense.id}
+          onClick={() => navigate("/expense-view", {state: {id: expense.id}})}
+        >
           <AmountDelete>
             <div>GHC {expense.amount}</div>
-            <BsX onClick={() => deleteExpense(expense.id)}/>
           </AmountDelete>
           <div>{expense.description}</div>
         </ExpenseContainer>

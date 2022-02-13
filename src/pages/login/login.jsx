@@ -21,10 +21,10 @@ export default function Login() {
   const onSubmit = async ({ username, password }) => {
     const res = await AuthService.login(username, password);
     if (res.status === 200) {
-      toast("Login successful", { duration: 2000, position: "bottom-center" });
+      toast("Login successful", { duration: 1500, position: "bottom-center" });
       navigate("/dashboard");
     } else if (res.status >= 400) {
-      toast("Login error", { duration: 2000, position: "bottom-center" });
+      toast("Login error", { duration: 1500, position: "bottom-center" });
     }
   };
 

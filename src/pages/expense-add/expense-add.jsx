@@ -25,8 +25,6 @@ export default function ExpenseAdd() {
   const onSubmit = async ({ amount, date, description }) => {
     console.log(amount, date, description);
     createExpense({ amount, date, description });
-    toast("Expense created successfully", {duration: 3000, position: "bottom-center"})
-    navigate("/dashboard");
   };
   return (
     <Container>

@@ -7,7 +7,7 @@ export const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   color: white;
   background-color: #0e0e0e;
   font-family: "Abel", sans-serif;

@@ -48,8 +48,7 @@ export default function Dashboard() {
     toast("Logout successful", { duration: 3500, position: "bottom-center" });
   };
 
-  // Perform the various API calls in the useEffect
-  useEffect(() => {
+  const getPageData = async () => {
     if (authenticated) {
       // Get the user summary
       getUserSummary()
@@ -63,6 +62,11 @@ export default function Dashboard() {
 
       console.log(monthlyExpenses);
     }
+  };
+
+  // Perform the various API calls in the useEffect
+  useEffect(() => {
+    getPageData();
   }, []);
 
   return authenticated ? (
@@ -100,6 +104,7 @@ export default function Dashboard() {
               expenseItems={Object.values(day)[0]}
               key={index}
               deleteExpense={deleteExpense}
+              getPageData={getPageData}
             />
           );
         })}
