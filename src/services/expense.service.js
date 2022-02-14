@@ -31,10 +31,10 @@ export default function ExpenseProvider({ children }) {
     }
   }
 
-  async function getMonthlyExpenses() {
+  async function getMonthlyExpenses(currentMonth = today.getMonth() + 1) {
     try {
       const response = await axios.get(
-        API_URL + `/expense/month/${today.getMonth() + 1}`,
+        API_URL + `/expense/month/${currentMonth}`,
         {
           headers: { Authorization: `Bearer ${AuthService.getToken()}` },
         }
@@ -141,7 +141,7 @@ export default function ExpenseProvider({ children }) {
           duration: 1500,
           position: "bottom-center",
         });
-        getPageData()
+        getPageData();
         return response.data;
       } else if (response.status === 404) {
         toast("Expense does not exist", {

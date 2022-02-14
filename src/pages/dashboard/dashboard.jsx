@@ -18,8 +18,12 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { BiLogOut } from "react-icons/bi";
 import { ExpenseContext } from "../../services/expense.service";
 import toast, { Toaster } from "react-hot-toast";
+import MonthPicker from "../../components/month-picker/month-picker";
 
 export default function Dashboard() {
+  // Get today's date
+  const today = new Date();
+
   const navigate = useNavigate();
 
   // Set initial state for the user summary
@@ -36,6 +40,8 @@ export default function Dashboard() {
     expenses_total_sum: 0.0,
   });
 
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
+
   const [authenticated, setAuthenticated] = useState(
     AuthService.isAuthenticated()
   );
@@ -48,6 +54,10 @@ export default function Dashboard() {
     toast("Logout successful", { duration: 3500, position: "bottom-center" });
   };
 
+  const changeMonth = async (month) => {
+    setCurrentMonth(month);
+  };
+
   const getPageData = async () => {
     if (authenticated) {
       // Get the user summary
@@ -56,18 +66,16 @@ export default function Dashboard() {
         .catch((error) => console.error(error));
 
       // Get all the current month expenses
-      getMonthlyExpenses()
+      getMonthlyExpenses(currentMonth)
         .then(setMonthlyExpenses)
         .catch((error) => console.error(error));
-
-      console.log(monthlyExpenses);
     }
   };
 
-  // Perform the various API calls in the useEffect
-  useEffect(() => {
-    getPageData();
-  }, []);
+  // Perform the various API calls in the useEffect  // Perform the various API calls when the current month changes 
+  useEffect(()=>{
+    getPageData()
+  },[currentMonth])
 
   return authenticated ? (
     <Container>
@@ -89,7 +97,7 @@ export default function Dashboard() {
       </InfoCards>
       <DurationButtonsContainer>
         <DurationButton>all</DurationButton>
-        <DurationButton>month</DurationButton>
+        <MonthPicker changeMonth={changeMonth} currentMonth={currentMonth}/>
       </DurationButtonsContainer>
       <ReportContainer>
         <Month
