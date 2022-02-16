@@ -5,6 +5,7 @@ import {
   DurationButtonsContainer,
   ReportContainer,
   PlusLogout,
+  NoExpense,
 } from "./styles";
 import InfoCard from "../../components/info-card/info-card";
 import { Username } from "../../components/username";
@@ -42,11 +43,93 @@ export default function Dashboard() {
 
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1);
 
+  const [allUserExpenses, setAllUserExpenses] = useState({
+    january: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    february: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    march: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    april: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    may: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    june: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    july: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    august: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    september: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    october: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    november: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+    december: [
+      {
+        days: {},
+        total_amount: 0,
+      },
+    ],
+  });
+
+  const [showAllUserExpenses, setShowAllUserExpenses] = useState(false);
+
   const [authenticated, setAuthenticated] = useState(
     AuthService.isAuthenticated()
   );
-  const { getUserSummary, getMonthlyExpenses, months, deleteExpense } =
-    useContext(ExpenseContext);
+  const {
+    getUserSummary,
+    getMonthlyExpenses,
+    months,
+    deleteExpense,
+    getAllUserExpenses,
+  } = useContext(ExpenseContext);
 
   const logout = async () => {
     await AuthService.logout();
@@ -55,6 +138,7 @@ export default function Dashboard() {
   };
 
   const changeMonth = async (month) => {
+    setShowAllUserExpenses(false);
     setCurrentMonth(month);
   };
 
@@ -72,10 +156,28 @@ export default function Dashboard() {
     }
   };
 
-  // Perform the various API calls in the useEffect  // Perform the various API calls when the current month changes 
-  useEffect(()=>{
-    getPageData()
-  },[currentMonth])
+  const getPageAllUserData = async () => {
+    getAllUserExpenses()
+      .then(setAllUserExpenses)
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  // Perform the various API calls in the useEffect  // Perform the various API calls when the current month changes
+  useEffect(() => {
+    getPageData();
+  }, [currentMonth]);
+
+  useEffect(() => {
+    getPageAllUserData();
+  }, [showAllUserExpenses]);
+
+  // const createAllUserExpensesReport = () => {
+  //   for (month in allUserExpenses){
+  //     <Month amount={allUserExpenses[month].total_amount} month={months[allUserExpenses[month].month_index]} year={allUserExpenses[month].year}/>
+  //   }
+  // }
 
   return authenticated ? (
     <Container>
@@ -96,27 +198,70 @@ export default function Dashboard() {
         <InfoCard description="sixty days" amount={userSummary.sixty_days} />
       </InfoCards>
       <DurationButtonsContainer>
-        <DurationButton>all</DurationButton>
-        <MonthPicker changeMonth={changeMonth} currentMonth={currentMonth}/>
+        <DurationButton
+          onClick={() => setShowAllUserExpenses(true)}
+        >
+          all
+        </DurationButton>
+        <MonthPicker changeMonth={changeMonth} currentMonth={currentMonth} />
       </DurationButtonsContainer>
-      <ReportContainer>
-        <Month
-          month={months[monthlyExpenses.month_index]}
-          amount={monthlyExpenses.expenses_total_sum}
-          year={monthlyExpenses.year}
-        />
-        {monthlyExpenses.expenses.map((day, index) => {
-          return (
-            <DayExpenseItem
-              day={Object.keys(day)[0]}
-              expenseItems={Object.values(day)[0]}
-              key={index}
-              deleteExpense={deleteExpense}
-              getPageData={getPageData}
-            />
-          );
-        })}
-      </ReportContainer>
+      {showAllUserExpenses ? (
+        <ReportContainer>
+          {allUserExpenses.all_expenses.map((month) => {
+            return (
+              <>
+                <Month
+                  month={Object.keys(month)[0]}
+                  amount={month[Object.keys(month)[0]][0].total_amount}
+                  year={month[Object.keys(month)[0]][0].year}
+                />
+                {month[Object.keys(month)[0]][0].days.length !== 0 ? (
+                  <>
+                    {month[Object.keys(month)][0].days.map((day, index) => {
+                      return (
+                        <>
+                          <DayExpenseItem
+                            day={Object.keys(day)[0]}
+                            expenseItems={Object.values(day)[0]}
+                            key={index}
+                            deleteExpense={deleteExpense}
+                            getPageData={getPageData}
+                          />
+                        </>
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    <hr style={{ width: "100%" }} />
+
+                    <NoExpense>No Expense</NoExpense>
+                  </>
+                )}
+              </>
+            );
+          })}
+        </ReportContainer>
+      ) : (
+        <ReportContainer>
+          <Month
+            month={months[monthlyExpenses.month_index]}
+            amount={monthlyExpenses.expenses_total_sum}
+            year={monthlyExpenses.year}
+          />
+          {monthlyExpenses.expenses.map((day, index) => {
+            return (
+              <DayExpenseItem
+                day={Object.keys(day)[0]}
+                expenseItems={Object.values(day)[0]}
+                key={index}
+                deleteExpense={deleteExpense}
+                getPageData={getPageData}
+              />
+            );
+          })}
+        </ReportContainer>
+      )}
     </Container>
   ) : (
     <Navigate to={"/login"} />

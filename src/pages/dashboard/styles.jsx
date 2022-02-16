@@ -43,10 +43,25 @@ export const DurationButtonsContainer = styled.div`
   justify-content: center;
   column-gap: 1.5rem;
 `;
+
 export const ReportContainer = styled.div`
   width: 90%;
   height: 40%;
   background-color: black;
   overflow-y: scroll;
   padding: 1rem;
+`;
+
+export const NoExpense = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  margin-bottom: 0.2rem;
+  background-color: #0e0e0e;
 `;
