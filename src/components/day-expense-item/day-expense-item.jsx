@@ -1,13 +1,14 @@
-import { DayContainer, ExpenseContainer, AmountDelete } from "./styles";
+import {
+  DayContainer,
+  ExpenseContainer,
+  AmountDelete,
+  NoExpense,
+} from "./styles";
 import { useNavigate } from "react-router-dom";
 
-export function DayExpenseItem({
-  day,
-  expenseItems,
-  getPageData,
-}) {
+export function DayExpenseItem({ day, expenseItems, getPageData }) {
   const navigate = useNavigate();
-  
+
   return (
     <>
       <DayContainer>
@@ -17,7 +18,9 @@ export function DayExpenseItem({
       {expenseItems.map((expense) => (
         <ExpenseContainer
           key={expense.id}
-          onClick={() => navigate("/expense-view", {state: {id: expense.id}})}
+          onClick={() =>
+            navigate("/expense-view", { state: { id: expense.id } })
+          }
         >
           <AmountDelete>
             <div>GHC {expense.amount}</div>
