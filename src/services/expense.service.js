@@ -155,6 +155,19 @@ export default function ExpenseProvider({ children }) {
     }
   }
 
+  async function getAllUserExpenses() {
+    try {
+      const response = await axios.get(API_URL + `/expense/`, {
+        headers: { Authorization: `Bearer ${AuthService.getToken()}` },
+      });
+      if (response.status === 200) {
+        return response.data;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <ExpenseContext.Provider
       value={{
@@ -164,6 +177,7 @@ export default function ExpenseProvider({ children }) {
         deleteExpense,
         getExpense,
         editExpense,
+        getAllUserExpenses,
         months,
         today,
       }}
