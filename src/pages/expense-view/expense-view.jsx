@@ -12,11 +12,9 @@ import {
 } from "./styles";
 import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { BsX } from "react-icons/bs";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ExpenseProvider, {
-  ExpenseContext,
-} from "../../services/expense.service";
+import { ExpenseContext } from "../../services/expense.service";
 import { useContext } from "react";
 import AuthService from "../../services/auth.service";
 import { useForm } from "react-hook-form";
@@ -46,16 +44,21 @@ export default function ExpenseView() {
   const [editExpenseBool, setEditExpenseBool] = useState(true);
 
   const onSubmit = async ({ amount, date, description }) => {
-    editExpense({ amount, date, description, id:location.state.id, getPageData});
-    setEditExpenseBool(!editExpenseBool)
+    editExpense({
+      amount,
+      date,
+      description,
+      id: location.state.id,
+      getPageData,
+    });
+    setEditExpenseBool(!editExpenseBool);
   };
 
   const getPageData = async () => {
     getExpense(location.state.id)
       .then(setExpense)
       .catch((error) => console.error(error));
-
-  }
+  };
 
   useEffect(() => {
     if (authenticated) {
@@ -65,7 +68,7 @@ export default function ExpenseView() {
 
   return (
     <Container>
-      <Toaster/>
+      <Toaster />
       <Icons>
         <FaArrowLeft onClick={() => navigate("/dashboard")} />
         <EditDelete>
@@ -97,7 +100,9 @@ export default function ExpenseView() {
             defaultValue={expense.amount}
             {...register("amount", { required: true })}
           />
-          <FormFieldLabel style={{ marginBottom: "1rem", marginTop: "1rem" }}>Date</FormFieldLabel>
+          <FormFieldLabel style={{ marginBottom: "1rem", marginTop: "1rem" }}>
+            Date
+          </FormFieldLabel>
           <FormField
             type="date"
             defaultValue={expense.date}

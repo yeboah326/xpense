@@ -17,7 +17,7 @@ export default function Signup() {
 
   const onSubmit = ({ username, email, password }) => {
     console.log(`${username} ${email} ${password}`);
-    toast("Trying 1 2");
+    toast("Sign up successful");
     AuthService.register(username, email, password);
     navigate("/login");
   };

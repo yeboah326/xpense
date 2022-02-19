@@ -173,11 +173,6 @@ export default function Dashboard() {
     getPageAllUserData();
   }, [showAllUserExpenses]);
 
-  // const createAllUserExpensesReport = () => {
-  //   for (month in allUserExpenses){
-  //     <Month amount={allUserExpenses[month].total_amount} month={months[allUserExpenses[month].month_index]} year={allUserExpenses[month].year}/>
-  //   }
-  // }
 
   return authenticated ? (
     <Container>

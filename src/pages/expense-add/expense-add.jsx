@@ -11,9 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { FaArrowLeft } from "react-icons/fa";
-import AuthService from "../../services/auth.service";
 import { ExpenseContext } from "../../services/expense.service";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 export default function ExpenseAdd() {
   const { register, handleSubmit } = useForm();

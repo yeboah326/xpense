@@ -2,7 +2,6 @@ import {
   DayContainer,
   ExpenseContainer,
   AmountDelete,
-  NoExpense,
 } from "./styles";
 import { useNavigate } from "react-router-dom";
 
