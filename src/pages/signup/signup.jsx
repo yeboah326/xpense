@@ -11,8 +11,6 @@ import toast, { Toaster } from "react-hot-toast";
 export default function Signup() {
   const navigate = useNavigate();
 
-  const signUpNotification = () => toast("Trying 1 2");
-
   const { register, handleSubmit } = useForm();
 
   const onSubmit = ({ username, email, password }) => {
